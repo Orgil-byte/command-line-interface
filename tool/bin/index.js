@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import arg from "arg";
 import chalk from "chalk";
-import { packageUp } from "package-up";
+import { getConfig } from "../src/commands/config-mgr";
+import { start } from "../src/commands/start";
 
 try {
   const args = arg({
@@ -10,29 +11,17 @@ try {
   });
 
   if (args["--start"]) {
-    const pkgPath = await packageUp({ cwd: process.cwd() });
-    const pkg = JSON.parse((await import("fs")).readFileSync(pkgPath, "utf8"));
-
-    if (pkg.tool) {
-      console.log("Found configuration", pkg.tool);
-    } else {
-      console.log(chalk.yellow("Could not find configuration, using default"));
-    }
-
-    console.log(chalk.italic.black.bgGreen("starting the app"));
+    const config = getConfig();
+    start(config);
   }
 } catch (e) {
-  console.log(chalk.red(e.message));
+  console.log(chalk.yellow(e.message));
   console.log();
   usage();
 }
 
 function usage() {
-  console.log(
-    chalk.bgYellow.black(`
-tool [CMD]
-  --start    Starts the app
-  --build    Builds the app
-  `),
-  );
+  console.log(`${chalk.whiteBright("tool [CMD]")}
+  ${chalk.greenBright("--start")}\tStarts the app
+  ${chalk.greenBright("--build")}\tBuilds the app`);
 }
