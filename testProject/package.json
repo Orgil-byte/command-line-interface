@@ -9,8 +9,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "tool": {
-    "port": 9999
-  }
+  "type": "module"
 }
