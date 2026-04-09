@@ -14,6 +14,8 @@ export async function getConfig() {
     console.log(chalk.yellow("Could not find configuration, using default"));
     return { port: 1234 };
   } else {
+    const config = result.config?.default ?? result.config;
+
     const isValid = ajv.validate(schema, result.config);
 
     if (!isValid) {
@@ -22,7 +24,7 @@ export async function getConfig() {
       process.exit(1);
     }
 
-    console.log("Found configuration", result.config);
-    return result.config;
+    console.log("Found configuration", config);
+    return config;
   }
 }
