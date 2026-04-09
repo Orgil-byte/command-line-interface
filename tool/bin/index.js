@@ -3,6 +3,9 @@ import arg from "arg";
 import chalk from "chalk";
 import { getConfig } from "../src/config/config-mgr.js";
 import { start } from "../src/commands/start.js";
+import createLogger from "../src/logger.js";
+
+const logger = createLogger("config:mgr");
 
 try {
   const args = arg({
@@ -10,12 +13,14 @@ try {
     "--build": Boolean,
   });
 
+  logger.debug("Received args", args);
+
   if (args["--start"]) {
     const config = await getConfig();
     start(config);
   }
 } catch (e) {
-  console.log(chalk.yellow(e.message));
+  logger.warning(e.message);
   console.log();
   usage();
 }
